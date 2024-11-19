@@ -1,4 +1,4 @@
-index.php
+Arquivo index.php
 
 
 <?php
@@ -127,5 +127,31 @@ div a{
     background-color: #55bbe4;
     justify-content: center;
 }
-
 </style>
+
+
+
+Arquivo add_tarefa
+
+<?php
+
+include 'database.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $descricao = $_POST['descricao'];
+    $data_vencimento = $_POST['data_vencimento'];
+
+    // Inserindo a nova tarefa no banco de dados
+    $query = "INSERT INTO tarefas (descricao, data_vencimento) VALUES (:descricao, :data_vencimento)";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':descricao', $descricao);
+    $stmt->bindParam(':data_vencimento', $data_vencimento);
+    $stmt->execute();
+}
+
+header("Location: index.php");
+exit;
+?>
+
+
+
