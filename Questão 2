@@ -130,8 +130,20 @@ div a{
 </style>
 
 
+Arquivo database.php
 
-Arquivo add_tarefa
+<?php
+
+$db = new PDO('sqlite:tarefas.db');
+$db->exec("CREATE TABLE IF NOT EXISTS tarefas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    descricao TEXT NOT NULL,
+    data_vencimento DATE NOT NULL,
+    concluida INTEGER DEFAULT 0
+)");
+?>
+
+Arquivo add_tarefa.php
 
 <?php
 
@@ -154,4 +166,42 @@ exit;
 ?>
 
 
+Arquivo update_tarefa.php
 
+<?php
+
+include 'database.php';
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+   
+    $query = "UPDATE tarefas SET concluida = 1 WHERE id = :id";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+header("Location: index.php");
+exit;
+?>
+
+
+Arquivo delete_tarefa.ph
+
+<?php
+
+include 'database.php';
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    $query = "DELETE FROM tarefas WHERE id = :id";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+header("Location: index.php");
+exit;
+?>
